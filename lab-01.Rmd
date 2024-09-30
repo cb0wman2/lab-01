@@ -9,6 +9,189 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+```{r}
+visitors <- read.csv("data/UK-visitor-numbers.csv")
+```
+
+```{r}
+visitors %>% head(n = 10)
+```
+
+# Warm-up Exercises
+### Q1. How many tourist attractions are there in the data set?
+
+```{r}
+nrow(visitors)
+```
+
+348
+
+#### a. Create a frequency table of the number of tourist attractions in the data set by region
+
+```{r}
+visitors %>%
+  count(region, sort = TRUE)
+```
+
+#### b. Create a frequency table by admission and setting
+
+```{r}
+visitors %>%
+  count(admission, setting, sort = TRUE)
+```
+
+### Q2. What are the variable data types?
+
+```{r}
+glimpse(visitors)
+```
+
+```{r}
+typeof(visitors$attraction)
+```
+
+### Q3. Which attraction had the most number of visitors in 2022?
+
+```{r}
+visitors %>% arrange(desc(n_2022))
+```
+
+The Crown Estate, Windsor Great Park
+
+#### c. What are the top 10 most visited attractions in 2021?
+
+```{r}
+visitors %>% arrange(desc(n_2021))
+```
+
+1. The Crown Estate, Windsor Great Park
+2. Royal Botanic Gardens Kew
+3. Natural History Museum (South Kensington)
+4. RHS Garden Wisley
+5. The British Museum
+6. Tate Modern
+7. Somerset House
+8. Science Museum
+9. Jeskyns Community Woodland
+10. V&A South Kensington
+
+### Q4. What is the admission charge for the National Museum of Scotland?
+
+```{r}
+visitors %>% filter(attraction == "National Museum of Scotland")
+```
+
+No admission charge
+
+#### d. Which attraction had exactly 565,772 visitors in 2022?
+
+```{r}
+visitors %>% filter(n_2022 == 565772)
+```
+
+Knowsley Safari and Knowsley Hall
+
+#### e. How many attractions had more than 1 million visitors in 2022?
+
+```{r}
+visitors %>% filter(n_2022 >= 1000000) %>%
+  count()
+```
+
+22
+
+### Q5. How many outside attractions are there in the Yorkshire and the Humber region that gives members free admission, which had more than 100,000 visitors in 2022?
+
+```{r}
+nrow(visitors %>%
+  filter(
+    setting == "O",
+    region == "Yorkshire and the Humber",
+    admission == "Members",
+    n_2022 >= 100000
+  ))
+```
+
+3
+
+#### f. How many attractions had between 50,000 and 100,0000 visitors in 2022?
+
+```{r}
+
+```
+
+#### g. How many regions have more than 50 tourist attractions in the data set?
+
+```{r}
+
+```
+
+### Q6. What are the mean and median visitor numbers in 2022 across all attractions?
+
+```{r}
+visitors %>%
+  summarise(
+    mean_2022 = mean(n_2022),
+    med_2022 = median(n_2022)
+  )
+```
+
+#### h. Perform the same calculation for the 2021 admissions data.
+
+```{r}
+visitors %>%
+  summarise(
+    mean_2021 = mean(n_2021),
+    med_2021 = median(n_2021)
+  )
+```
+
+#### i. What does NA stand for and why are you getting this as your answer to the previous question?
+
+Values cannot be found/not applicable
+
+Some attractions may not have been open in 2021 (hence, no value)
+
+#### j. Edit your code from exercise h so that it computes the summary statistics where data is available.
+
+```{r}
+
+```
+
+### Q7. Which setting (inside, outside or mixed) has the largest mean visitor numbers in 2022?
+
+```{r}
+visitors %>%
+  group_by(setting) %>%
+  summarise(
+    mean_2022 = mean(n_2022),
+    med_2022 = median(n_2022)
+  )
+```
+
+Inside
+
+#### k.
+
+### Q8. What is the interquartile range for each of the four nations of the four nations of the UK?
+
+```{r}
+#English regions into a nation variable
+visitors_with_nations <- visitors %>%
+  mutate(
+    nation = case_when(
+  region == "Northern Ireland" ~ "Northern Ireland",
+  region == "Scotland" ~ "Scotland",
+  region == "Wales" ~ "Wales",
+  TRUE ~ "England"
+))
+```
+
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
