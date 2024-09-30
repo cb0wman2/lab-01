@@ -24,7 +24,7 @@ visitors %>% head(n = 10)
 # Warm-up Exercises
 ### Q1. How many tourist attractions are there in the data set?
 
-```{r}
+```{r, echo=FALSE}
 nrow(visitors)
 ```
 
@@ -32,31 +32,31 @@ nrow(visitors)
 
 #### a. Create a frequency table of the number of tourist attractions in the data set by region
 
-```{r}
+```{r, echo=FALSE}
 visitors %>%
   count(region, sort = TRUE)
 ```
 
 #### b. Create a frequency table by admission and setting
 
-```{r}
+```{r, echo=FALSE}
 visitors %>%
   count(admission, setting, sort = TRUE)
 ```
 
 ### Q2. What are the variable data types?
 
-```{r}
+```{r, echo=FALSE}
 glimpse(visitors)
 ```
 
-```{r}
+```{r, echo=FALSE}
 typeof(visitors$attraction)
 ```
 
 ### Q3. Which attraction had the most number of visitors in 2022?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>% arrange(desc(n_2022))
 ```
 
@@ -64,7 +64,7 @@ The Crown Estate, Windsor Great Park
 
 #### c. What are the top 10 most visited attractions in 2021?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>% arrange(desc(n_2021))
 ```
 
@@ -81,7 +81,7 @@ visitors %>% arrange(desc(n_2021))
 
 ### Q4. What is the admission charge for the National Museum of Scotland?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>% filter(attraction == "National Museum of Scotland")
 ```
 
@@ -89,7 +89,7 @@ No admission charge
 
 #### d. Which attraction had exactly 565,772 visitors in 2022?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>% filter(n_2022 == 565772)
 ```
 
@@ -97,7 +97,7 @@ Knowsley Safari and Knowsley Hall
 
 #### e. How many attractions had more than 1 million visitors in 2022?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>% filter(n_2022 >= 1000000) %>%
   count()
 ```
@@ -106,7 +106,7 @@ visitors %>% filter(n_2022 >= 1000000) %>%
 
 ### Q5. How many outside attractions are there in the Yorkshire and the Humber region that gives members free admission, which had more than 100,000 visitors in 2022?
 
-```{r}
+```{r, echo=FALSE}
 nrow(visitors %>%
   filter(
     setting == "O",
@@ -132,7 +132,7 @@ nrow(visitors %>%
 
 ### Q6. What are the mean and median visitor numbers in 2022 across all attractions?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>%
   summarise(
     mean_2022 = mean(n_2022),
@@ -142,7 +142,7 @@ visitors %>%
 
 #### h. Perform the same calculation for the 2021 admissions data.
 
-```{r}
+```{r, echo=FALSE}
 visitors %>%
   summarise(
     mean_2021 = mean(n_2021),
@@ -164,7 +164,7 @@ Some attractions may not have been open in 2021 (hence, no value)
 
 ### Q7. Which setting (inside, outside or mixed) has the largest mean visitor numbers in 2022?
 
-```{r}
+```{r, echo=FALSE}
 visitors %>%
   group_by(setting) %>%
   summarise(
@@ -177,20 +177,45 @@ Inside
 
 #### k.
 
-### Q8. What is the interquartile range for each of the four nations of the four nations of the UK?
+### Q8. What is the interquartile range for each of the 4 nations of the UK?
 
-```{r}
+```{r, echo=FALSE}
 #English regions into a nation variable
 visitors_with_nations <- visitors %>%
   mutate(
     nation = case_when(
-  region == "Northern Ireland" ~ "Northern Ireland",
-  region == "Scotland" ~ "Scotland",
-  region == "Wales" ~ "Wales",
-  TRUE ~ "England"
+      region == "Northern Ireland" ~ "Northern Ireland",
+      region == "Scotland" ~ "Scotland",
+      region == "Wales" ~ "Wales",
+      TRUE ~ "England"
 ))
+
+#Calculating the IQR for each nation
+visitors_with_nations %>%
+  group_by(nation) %>%
+  summarise(
+    IQR_2022 = IQR(n_2022)
+  )
 ```
 
+#### l. How many tourist attractions are there in each of the 4 nations?
+
+```{r, echo=FALSE}
+visitors_with_nations %>%
+  count(nation, sort = TRUE)
+```
+
+#### m. Within each of the 4 nations, what is the proportion of tourist attractions that have free admission for all visitors?
+
+```{r}
+
+```
+
+#### n. Calculate the percentage change in visitor admissions from 2021 to 2022. Of the tourist attractions in Scotland, sort into increasing numerical order the types of admission charges based on the mean percentage change in visitor numbers.
+
+```{r}
+
+```
 
 ## R Markdown
 
